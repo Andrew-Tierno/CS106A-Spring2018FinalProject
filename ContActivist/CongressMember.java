@@ -5,11 +5,40 @@
  */
 public class CongressMember {
 	
-	// TODO: What instance variables do we need?
+	// Instance Variables
+	String name;
+	String stateCode;
+	String phone;
+	String email;
 
-	public CongressMember(/* TODO: What parameters do we use? */) {
-
+	//Constructor method
+	public CongressMember(String name, String stateCode, String phone, String email) {
+		this.name = name;
+		this.stateCode = stateCode;
+		this.phone = phone;
+		if (!email.equals("")) {
+			this.email = email;
+		} else {
+			this.email = "NO EMAIL";
+		}
+		
 	}
 	
-	// TODO: What public or private methods do we need?
+	//Class methods
+	public String getName() {
+		return name;
+	}
+	
+	public String getState() {
+		return stateCode;
+	}
+	
+	public String getPhone() {
+		return phone;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+	
 }

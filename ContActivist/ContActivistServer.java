@@ -22,9 +22,11 @@ public class ContActivistServer extends ConsoleProgram
 	
 	/* INSTANCE VARIABLES */
 	private SimpleServer server;
+	private HashMap<String, ArrayList<CongressMember>> congressMap;
+	private ArrayList<CongressMember> memberList = new ArrayList<CongressMember>();
 
 	public void run() {
-		// TODO: Do we need to do any setup?
+		readCongressFile(DATA_FILENAME);
 		
 		println("Starting server on port " + PORT);
 		server = new SimpleServer(this, PORT);
@@ -34,11 +36,23 @@ public class ContActivistServer extends ConsoleProgram
 	private void readCongressFile(String filename) {
 
 		try {
-			Scanner scanner = new Scanner(new File(filename));			
+			Scanner scanner = new Scanner(new File(filename));
+			//hashmap of key: state, value: ArrayList of congress members
+			congressMap = new HashMap<String, ArrayList<CongressMember>>();
 			
 			while (scanner.hasNextLine()) {
 				// TODO: How should we store the congress members' information?
 				// If only we had a variable type... 
+				String name = scanner.nextLine();
+				String stateCode = scanner.nextLine();
+				String phone = scanner.nextLine();
+				String email = scanner.nextLine();
+				scanner.nextLine(); //takes care of blank
+				CongressMember newMember = new CongressMember(name, stateCode, phone, email);
+				if (!congressMap.containsKey(stateCode)) {
+					congressMap.put(stateCode, new ArrayList<CongressMember>());
+				}
+				congressMap.get(stateCode).add(newMember);
 			}	
 			scanner.close();
 		} catch (IOException e) {
@@ -51,11 +65,17 @@ public class ContActivistServer extends ConsoleProgram
 		println("Request received: " + request); //request.toString() is automatically called
 		
 		String response = "";
-		
+		String stateCode = request.getParam("stateCode");
+		ArrayList<CongressMember> members = congressMap.get(stateCode);
+		println(request.toString());
 		if (cmd.equals("getCongressPhonesForState")) {
-			
+			for (CongressMember member : members) {
+				response += member.getName() + ": " + member.getPhone();
+			}
 		} else if (cmd.equals("getCongressEmailsForState")) {
-			
+			for (CongressMember member : members) {
+				response += member.getName() + ": " + member.getEmail();
+			}
 		} else {
 			response = "Error: Unknown command " + cmd + ".";
 		}
