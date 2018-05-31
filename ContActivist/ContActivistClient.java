@@ -34,7 +34,20 @@ public class ContActivistClient extends ConsoleProgram {
 	 * an error occurs.
 	 */
 	private void sendRequest(String stateCode, boolean isEmail) {
-		//TODO: Write me!
+		try {
+			String command = "";
+			if(isEmail) {
+				command = "getCongressEmailsForState";
+			} else {
+				command = "getCongressPhonesForState";
+			}
+			Request request = new Request(command);
+			request.addParam("stateCode", stateCode);
+			String contactInfo = SimpleClient.makeRequest(HOST, request);
+			println(contactInfo);
+		} catch (IOException e) {
+			System.out.println("sadBoiii");
+		}
 	}
 }
 
